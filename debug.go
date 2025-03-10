@@ -62,3 +62,14 @@ func (io *IO) Println(x ...any) {
 }
 
 func (io *IO) Flush() { io.w.Flush() }
+
+func printSlice(io *IO, a []int64) {
+	var b strings.Builder
+	for c, d := range a {
+		if c > 0 {
+			b.WriteByte(' ')
+		}
+		b.WriteString(strconv.FormatInt(d, 10))
+	}
+	io.Println(b.String())
+}
