@@ -9,8 +9,8 @@ import (
 
 type FastReader struct {
 	r   *bufio.Reader
-	buf []byte 
-	pos int    
+	buf []byte
+	pos int
 }
 
 func NewFastReader() *FastReader {
@@ -83,7 +83,6 @@ func (fr *FastReader) readString(n int) (string, error) {
 }
 
 func main() {
-
 	scanner := NewFastReader()
 	out := new(bytes.Buffer)
 
