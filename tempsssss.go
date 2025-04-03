@@ -82,3 +82,5 @@ type Query struct {
 	d   int  
 	k   int  
 }
+
+
