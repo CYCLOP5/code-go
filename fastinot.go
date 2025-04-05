@@ -82,6 +82,14 @@ func (fr *FastReader) readString(n int) (string, error) {
 	return string(res), nil
 }
 
+func readUint64(fr *FastReader) (uint64, error) {
+	x, err := fr.readInt()
+	if err != nil {
+		return 0, err
+	}
+	return uint64(x), nil
+}
+
 func main() {
 	scanner := NewFastReader()
 	out := new(bytes.Buffer)
