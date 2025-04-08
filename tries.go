@@ -47,24 +47,3 @@ func (t *TrieNode) Remove(val int) {
 	}
 }
 
-func (t *TrieNode) QueryMaxXOR(val int) int {
-	node := t
-	if node.count == 0 {
-		return 0
-	}
-
-	maxXOR := 0
-	for i := maxBits - 1; i >= 0; i-- {
-		bit := (val >> i) & 1
-		targetBit := 1 - bit
-		if node.children[targetBit] != nil && node.children[targetBit].count > 0 {
-			maxXOR |= (1 << i)
-			node = node.children[targetBit]
-		} else if node.children[bit] != nil && node.children[bit].count > 0 {
-			node = node.children[bit]
-		} else {
-			return maxXOR
-		}
-	}
-	return maxXOR
-}
