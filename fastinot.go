@@ -64,7 +64,22 @@ func (fr *FastReader) readInt() (int64, error) {
 	}
 	return sign * x, nil
 }
-
+func readLine(fr *FastReader) (string, error) {
+	var buf bytes.Buffer
+	for {
+		b, err := fr.readByte()
+		if err != nil {
+			return "", err
+		}
+		if b == '\n' {
+			break
+		}
+		if b != '\r' {
+			buf.WriteByte(b)
+		}
+	}
+	return buf.String(), nil
+}
 func (fr *FastReader) readString(n int) (string, error) {
 	res := make([]byte, n)
 	i := 0
@@ -89,6 +104,16 @@ func readUint64(fr *FastReader) (uint64, error) {
 	}
 	return uint64(x), nil
 }
+
+
+func (fr *FastReader) readLine() (string, error) {
+	line, err := fr.r.ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimRight(line, "\r\n"), nil
+}
+
 
 func main() {
 	scanner := NewFastReader()
