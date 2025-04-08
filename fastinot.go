@@ -113,7 +113,21 @@ func (fr *FastReader) readLine() (string, error) {
 	}
 	return strings.TrimRight(line, "\r\n"), nil
 }
+func nextInt64() int64 {
+	val, err := fr.readInt()
+	if err != nil {
+		panic(err)
+	}
+	return val
+}
 
+func nextString() string {
+	val, err := fr.readToken()
+	if err != nil {
+		panic(err)
+	}
+	return val
+}
 
 func main() {
 	scanner := NewFastReader()
