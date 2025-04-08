@@ -1,49 +1,45 @@
-const maxBits = 123
+const mb = 30
 
 type TrieNode struct {
-	children [2]*TrieNode
-	count    int
+	c   [2]*TrieNode
+	cnt int
 }
 
 func (t *TrieNode) Insert(val int) {
 	node := t
-	node.count++
-	for i := maxBits - 1; i >= 0; i-- {
+	node.cnt++
+	for i := mb - 1; i >= 0; i-- {
 		bit := (val >> i) & 1
-		if node.children[bit] == nil {
-			node.children[bit] = &TrieNode{}
+		if node.c[bit] == nil {
+			node.c[bit] = &TrieNode{}
 		}
-		node = node.children[bit]
-		node.count++
+		node = node.c[bit]
+		node.cnt++
 	}
 }
 
 func (t *TrieNode) Remove(val int) {
 	node := t
-	node.count--
-
-	nodesToPrune := []*TrieNode{t}
-	indices := []int{}
-
-	for i := maxBits - 1; i >= 0; i-- {
+	node.cnt--
+	nodep := []*TrieNode{t}
+	idx := []int{}
+	for i := mb - 1; i >= 0; i-- {
 		bit := (val >> i) & 1
-		if node.children[bit] == nil {
+		if node.c[bit] == nil {
 			return
 		}
-		nodesToPrune = append(nodesToPrune, node.children[bit])
-		indices = append(indices, bit)
-		node = node.children[bit]
-		node.count--
+		nodep = append(nodep, node.c[bit])
+		idx = append(idx, bit)
+		node = node.c[bit]
+		node.cnt--
 	}
-
-	for i := len(nodesToPrune) - 2; i >= 0; i-- {
-		parent := nodesToPrune[i]
-		childIdx := indices[i]
-		if parent.children[childIdx] != nil && parent.children[childIdx].count == 0 {
-			parent.children[childIdx] = nil
+	for i := len(nodep) - 2; i >= 0; i-- {
+		pt := nodep[i]
+		cidx := idx[i]
+		if pt.c[cidx] != nil && pt.c[cidx].cnt == 0 {
+			pt.c[cidx] = nil
 		} else {
 			break
 		}
 	}
 }
-
