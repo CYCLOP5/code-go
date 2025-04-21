@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"strings"
+	"sort"
 	"os"
 )
 
@@ -113,46 +115,4 @@ func (fr *FastReader) readLine() (string, error) {
 	}
 	return strings.TrimRight(line, "\r\n"), nil
 }
-func nextInt64() int64 {
-	val, err := fr.readInt()
-	if err != nil {
-		panic(err)
-	}
-	return val
-}
 
-func nextString() string {
-	val, err := fr.readToken()
-	if err != nil {
-		panic(err)
-	}
-	return val
-}
-
-func main() {
-	scanner := NewFastReader()
-	out := new(bytes.Buffer)
-
-	t, err := scanner.readInt()
-	if err != nil {
-		return
-	}
-
-	for i := int64(0); i < t; i++ {
-
-		a, err := scanner.readInt()
-		if err != nil {
-			return
-		}
-		b, err := scanner.readInt()
-		if err != nil {
-			return
-		}
-
-		res := a + b
-
-		out.WriteString(fmt.Sprintf("%d\n", res))
-	}
-
-	fmt.Print(out.String())
-}
