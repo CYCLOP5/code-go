@@ -1,71 +1,72 @@
-type SegTreeNode struct {
-	maxAvailable int 
+type segtreenode struct {
+	maxavail int
 }
-type SegmentTree struct {
-	nodes []SegTreeNode
-	n     int 
+type segtree struct {
+	nodes []segtreenode
+	n     int
 }
-func NewSegmentTree(size int) *SegmentTree {
-	st := &SegmentTree{
-		nodes: make([]SegTreeNode, 4*(size+1)),
+
+func newseg(size int) *segtree {
+	st := &segtree{
+		nodes: make([]segtreenode, 4*(size+1)),
 		n:     size,
 	}
-	st.build(1, 1, size) 
+	st.build(1, 1, size)
 	return st
 }
-func (st *SegmentTree) build(nodeIdx, L, R int) {
-	if L == R {
-		st.nodes[nodeIdx] = SegTreeNode{maxAvailable: L}
+func (st *segtree) build(nidx, l, r int) {
+	if l == r {
+		st.nodes[nidx] = segtreenode{maxavail: l}
 		return
 	}
-	mid := (L + R) / 2
-	st.build(2*nodeIdx, L, mid)
-	st.build(2*nodeIdx+1, mid+1, R)
-	st.nodes[nodeIdx].maxAvailable = maxInt(st.nodes[2*nodeIdx].maxAvailable, st.nodes[2*nodeIdx+1].maxAvailable)
+	mid := (l + r) / 2
+	st.build(2*nidx, l, mid)
+	st.build(2*nidx+1, mid+1, r)
+	st.nodes[nidx].maxavail = maxint(st.nodes[2*nidx].maxavail, st.nodes[2*nidx+1].maxavail)
 }
-func (st *SegmentTree) Update(targetIdx int, available bool) {
-	if targetIdx < 1 || targetIdx > st.n {
-		return 
+func (st *segtree) Update(taridx int, avail bool) {
+	if taridx < 1 || taridx > st.n {
+		return
 	}
-	st.updateRecursive(1, 1, st.n, targetIdx, available)
+	st.updrecur(1, 1, st.n, taridx, avail)
 }
-func (st *SegmentTree) updateRecursive(nodeIdx, L, R, targetIdx int, available bool) {
-	if L == R {
-		if available {
-			st.nodes[nodeIdx].maxAvailable = L 
+func (st *segtree) updrecur(nidx, l, r, taridx int, avail bool) {
+	if l == r {
+		if avail {
+			st.nodes[nidx].maxavail = l
 		} else {
-			st.nodes[nodeIdx].maxAvailable = 0 
+			st.nodes[nidx].maxavail = 0
 		}
 		return
 	}
-	mid := (L + R) / 2
-	if targetIdx <= mid {
-		st.updateRecursive(2*nodeIdx, L, mid, targetIdx, available)
+	mid := (l + r) / 2
+	if taridx <= mid {
+		st.updrecur(2*nidx, l, mid, taridx, avail)
 	} else {
-		st.updateRecursive(2*nodeIdx+1, mid+1, R, targetIdx, available)
+		st.updrecur(2*nidx+1, mid+1, r, taridx, avail)
 	}
-	st.nodes[nodeIdx].maxAvailable = maxInt(st.nodes[2*nodeIdx].maxAvailable, st.nodes[2*nodeIdx+1].maxAvailable)
+	st.nodes[nidx].maxavail = maxint(st.nodes[2*nidx].maxavail, st.nodes[2*nidx+1].maxavail)
 }
-func (st *SegmentTree) QueryMaxAvailable(queryL, queryR int) int {
-	queryL = maxInt(1, queryL)
-	queryR = minInt(st.n, queryR)
-	if queryL > queryR { 
+func (st *segtree) querymax(queryL, queryR int) int {
+	queryL = maxint(1, queryL)
+	queryR = minint(st.n, queryR)
+	if queryL > queryR {
 		return 0
 	}
-	return st.queryMaxAvailableRecursive(1, 1, st.n, queryL, queryR)
+	return st.querymaxrecur(1, 1, st.n, queryL, queryR)
 }
-func (st *SegmentTree) queryMaxAvailableRecursive(nodeIdx, L, R, queryL, queryR int) int {
-	if R < queryL || L > queryR {
-		return 0 
-	}
-	if st.nodes[nodeIdx].maxAvailable == 0 {
+func (st *segtree) querymaxrecur(nidx, l, r, queryL, queryR int) int {
+	if r < queryL || l > queryR {
 		return 0
 	}
-	if queryL <= L && R <= queryR {
-		return st.nodes[nodeIdx].maxAvailable 
+	if st.nodes[nidx].maxavail == 0 {
+		return 0
 	}
-	mid := (L + R) / 2
-	rightMax := st.queryMaxAvailableRecursive(2*nodeIdx+1, mid+1, R, queryL, queryR)
-	leftMax := st.queryMaxAvailableRecursive(2*nodeIdx, L, mid, queryL, queryR)
-	return maxInt(leftMax, rightMax)
+	if queryL <= l && r <= queryR {
+		return st.nodes[nidx].maxavail
+	}
+	mid := (l + r) / 2
+	rightMax := st.querymaxrecur(2*nidx+1, mid+1, r, queryL, queryR)
+	leftMax := st.querymaxrecur(2*nidx, l, mid, queryL, queryR)
+	return maxint(leftMax, rightMax)
 }
