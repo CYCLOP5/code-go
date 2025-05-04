@@ -34,7 +34,7 @@ func (st *SegTree) push(v, tl, tr int) {
 	st.tree[2*v+1].heurval = max(st.tree[2*v+1].heurval, lazyVal)
 	st.tree[v].heurval = neginf
 }
-func (st *SegTree) updateRange(v, tl, tr, l, r, value int) {
+func (st *SegTree) updrange(v, tl, tr, l, r, value int) {
 	if l > r || tr < l || tl > r {
 		return
 	}
@@ -45,11 +45,11 @@ func (st *SegTree) updateRange(v, tl, tr, l, r, value int) {
 	}
 	st.push(v, tl, tr)
 	tm := (tl + tr) / 2
-	st.updateRange(2*v, tl, tm, l, r, value)
-	st.updateRange(2*v+1, tm+1, tr, l, r, value)
+	st.updrange(2*v, tl, tm, l, r, value)
+	st.updrange(2*v+1, tm+1, tr, l, r, value)
 	st.tree[v].maxval = max(st.tree[2*v].maxval, st.tree[2*v+1].maxval)
 }
-func (st *SegTree) queryPoint(v, tl, tr, pos int) int {
+func (st *SegTree) pointerquery(v, tl, tr, pos int) int {
 	if tl == tr {
 		return st.tree[v].maxval
 	}
@@ -57,9 +57,9 @@ func (st *SegTree) queryPoint(v, tl, tr, pos int) int {
 	tm := (tl + tr) / 2
 	var res int
 	if pos <= tm {
-		res = st.queryPoint(2*v, tl, tm, pos)
+		res = st.pointerquery(2*v, tl, tm, pos)
 	} else {
-		res = st.queryPoint(2*v+1, tm+1, tr, pos)
+		res = st.pointerquery(2*v+1, tm+1, tr, pos)
 	}
 	return res
 }
