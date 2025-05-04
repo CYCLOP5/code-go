@@ -1,32 +1,26 @@
-import sys, os, io
+import sys, threading, gc
+sys.setrecursionlimit(10**7)
+gc.disable()
 
-_data = io.BytesIO(os.read(0, os.fstat(0).st_size)).read().split()
-_idx = 0
-def inp() -> str:
-    global _idx
-    val = _data[_idx]
-    _idx += 1
-    return val.decode()
-def ri() -> int:
+data = sys.stdin.buffer.read().split()
+idc = 0
+def inp(): 
+    global idc; v = data[idc]; idc += 1; return v
+def ni():  
     return int(inp())
-def rstr() -> str:
-    return inp()
-def raf() -> float:
-    return float(inp())
-
 _out = sys.stdout.write
-def out(s: str):
-    _out(s)
-def outl(s: str):
+def outl(s):  
     _out(s + '\n')
 
-def main():
-    t = ri()
+def solve():
+    t = ni()
     for _ in range(t):
-        n = ri()
-        arr = [ri() for _ in range(n)]
+        n = ni()
+        arr = [ni() for _ in range(n)]
 
         outl(str(sum(arr)))
 
 if __name__ == "__main__":
-    main()
+
+    solve()
+    gc.enable()
