@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sort"
 	"os"
+	"strconv"
 )
 
 type FastReader struct {
@@ -22,17 +23,17 @@ func NewFastReader() *FastReader {
 }
 
 func (fr *FastReader) readByte() (byte, error) {
-	if fr.pos >= len(fr.buf) {
-		var err error
-		fr.buf, err = fr.r.ReadBytes('\n')
-		if err != nil {
-			return 0, err
-		}
-		fr.pos = 0
-	}
-	b := fr.buf[fr.pos]
-	fr.pos++
-	return b, nil
+  if fr.pos >= len(fr.buf) {
+      var err error
+      fr.buf, err = fr.r.ReadBytes('\n')
+      if err != nil && len(fr.buf) == 0 {
+        return 0, err
+      }
+      fr.pos = 0
+    }
+  b := fr.buf[fr.pos]
+  fr.pos++
+  return b, nil
 }
 
 func (fr *FastReader) readInt() (int64, error) {
@@ -66,6 +67,7 @@ func (fr *FastReader) readInt() (int64, error) {
 	}
 	return sign * x, nil
 }
+
 func readLine(fr *FastReader) (string, error) {
 	var buf bytes.Buffer
 	for {
@@ -82,6 +84,7 @@ func readLine(fr *FastReader) (string, error) {
 	}
 	return buf.String(), nil
 }
+
 func (fr *FastReader) readString(n int) (string, error) {
 	res := make([]byte, n)
 	i := 0
@@ -99,6 +102,11 @@ func (fr *FastReader) readString(n int) (string, error) {
 	return string(res), nil
 }
 
+func (fr *FastReader) readLine() (string, error) {
+    line, _ := fr.r.ReadString('\n')
+    return strings.TrimRight(line, "\r\n"), nil
+}
+
 func readUint64(fr *FastReader) (uint64, error) {
 	x, err := fr.readInt()
 	if err != nil {
@@ -106,13 +114,17 @@ func readUint64(fr *FastReader) (uint64, error) {
 	}
 	return uint64(x), nil
 }
-
-
-func (fr *FastReader) readLine() (string, error) {
-	line, err := fr.r.ReadString('\n')
-	if err != nil {
-		return "", err
-	}
-	return strings.TrimRight(line, "\r\n"), nil
+func solve(fr *FastReader, writer *bufio.Writer) error {
 }
-
+func main() {
+    fr := NewFastReader()
+    writer := bufio.NewWriter(os.Stdout)
+    defer writer.Flush()
+    tt, _ := fr.readInt()
+    t := int(tt)
+    for i := 0; i < t; i++ {
+        if err := solve(fr, writer); err != nil {
+            panic(err)
+        }
+    }
+}
