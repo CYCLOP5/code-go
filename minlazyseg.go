@@ -1,3 +1,7 @@
+
+func min(a, b int) int { if a < b { return a }; return b }
+func max(a, b int) int { if a > b { return a }; return b }
+func abs(x int) int    { if x < 0 { return -x }; return x }
 type node struct {
 	minval int
 	lazy   int 
@@ -30,14 +34,15 @@ func (st *SegTree) push(v int) {
 	if st.tree[v].lazy == posinf {
 		return
 	}
-	lazyVal := st.tree[v].lazy
-
-	st.tree[2*v].minval = min(st.tree[2*v].minval, lazyVal)
-	st.tree[2*v].lazy = min(st.tree[2*v].lazy, lazyVal)
-
-	st.tree[2*v+1].minval = min(st.tree[2*v+1].minval, lazyVal)
-	st.tree[2*v+1].lazy = min(st.tree[2*v+1].lazy, lazyVal)
-
+	val := st.tree[v].lazy
+	for _, c := range []int{2 * v, 2*v + 1} {
+		if st.tree[c].minval > val {
+			st.tree[c].minval = val
+		}
+		if st.tree[c].lazy > val {
+			st.tree[c].lazy = val
+		}
+	}
 	st.tree[v].lazy = posinf
 }
 
